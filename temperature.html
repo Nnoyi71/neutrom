@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<title>Fenomenul de evaporare</title>
+<style>
+    body {
+        
+        background-color: #f0f0f0;
+        text-align: center;
+        padding: 20px;
+    }
+    #container {
+        width: 500px;
+        height: 300px;
+        border: 2px solid #333;
+        margin: 20px auto;
+        background-color: beige;
+        position: relative;
+        overflow: hidden;
+    }
+    .ball {
+        position: absolute;
+        border-radius: 50%;
+    }
+    .blue {
+        background-color: blue;
+        width: 20px;
+        height: 20px;
+        animation: fall 1s forwards;
+    }
+	.box {
+		width:50vw;
+		height: 50vh;
+		background-image: linear-gradient(white, beige);
+	}
+    .white {
+        background-color: white;
+        border: 1px solid #ccc;
+        width: 10px;
+        height: 10px;
+    }
+    .vapor {
+        background-color: rgba(128,128,128,0.4);
+        width: 10px;
+        height: 10px;
+        animation: rise 3s forwards;
+    }
+
+    /* Gravitație - bile mari */
+    @keyframes fall {
+        from { top: 0; }
+        to { top: 280px; }
+    }
+
+    /* Vapori - urcă */
+    @keyframes rise {
+        from { top: 280px; opacity: 1; }
+        to { top: 0; opacity: 0; }
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    /* Flacără */
+    #flacara {
+        display: none;
+        position: absolute;
+        top: -80px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: auto;
+        z-index: 10;
+    }
+</style>
+</head>
+<body>
+
+<h1 style="color: red">Fenomenul de evaporare</h1>
+<div id="container">
+    <!-- Imagine flacără -->
+    <img id="flacara" src="https://cdn.pixabay.com/photo/2017/08/30/01/05/flame-2698576_1280.png" alt="Flacără">
+</div>
+<button id="evaporareBtn">Evaporare</button>
+
+<script>
+    const container = document.getElementById('container');
+    const evaporareBtn = document.getElementById('evaporareBtn');
+    const flacaraImg = document.getElementById('flacara');
+
+    // Creăm bile albastre inițiale
+    function createBlueBalls(count) {
+        container.innerHTML = '';
+        container.appendChild(flacaraImg); // păstrăm flacăra în container
+        flacaraImg.style.display = 'none';
+        for (let i = 0; i < count; i++) {
+            const ball = document.createElement('div');
+            ball.classList.add('ball', 'blue');
+            ball.style.left = Math.random() * (container.clientWidth - 20) + 'px';
+            container.appendChild(ball);
+        }
+    }
+
+    // Evaporare: bile albastre -> bile albe + duplicare -> vapori
+    function evaporare() {
+        flacaraImg.style.display = 'block'; // afișăm flacăra
+
+        const blueBalls = document.querySelectorAll('.blue');
+
+        blueBalls.forEach(ball => {
+            const delay = Math.random() * 10000; // timp aleator 0-5 secunde
+
+            setTimeout(() => {
+                // Transformă bila albastră în albă mică
+                ball.classList.remove('blue');
+                ball.classList.add('white');
+                ball.style.width = '10px';
+                ball.style.height = '10px';
+                ball.style.top = '280px'; // rămâne jos
+
+                // Creează duplicatul alb
+                const duplicate = document.createElement('div');
+                duplicate.classList.add('ball', 'white');
+                duplicate.style.width = '10px';
+                duplicate.style.height = '10px';
+                duplicate.style.left = parseFloat(ball.style.left) + 12 + 'px';
+                duplicate.style.top = '280px';
+                container.appendChild(duplicate);
+
+                // Transformă ambele bile albe în vapori
+                [ball, duplicate].forEach(b => {
+                    b.classList.remove('white');
+                    b.classList.add('vapor');
+                });
+            }, delay);
+        });
+    }
+
+    // Inițializare
+    createBlueBalls(50);
+
+    evaporareBtn.addEventListener('click', evaporare);
+</script>
+
+</body>
+<h2 style="color: black">PENTRU APA</h2>
+<h2 style="color: grey">La 100 de grade Celsius </h2>
+<h2 style="color: blue">La 373,15 grade Kelvin</h2>
+<h2 style="color: orange">La 212 grade Fahrenheit</h2>
+<h1 style="color: black" ><b>DECE ARE LOC EVAPORAREA?</b></h1>
+<h2 style="color:black; font: sans-serif">Evaporarea sau evaporația este procesul prin care atomii sau moleculele unui corp în stare lichidă acumulează suficientă energie pentru a ajunge în stare gazoasă. Evaporația este una din cele două forme ale vaporizării, cealaltă formă fiind fierberea. Procesul invers evaporării este condensarea.</h2>
+</html>
+
